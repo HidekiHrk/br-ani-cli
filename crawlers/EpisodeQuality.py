@@ -1,4 +1,4 @@
 class EpisodeQuality:
-    def __init__(self, name: str, url: str):
-        self.name = name
+    def __init__(self, title: str, url: str):
+        self.title = title
         self.url = url

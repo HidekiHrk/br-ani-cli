@@ -1,24 +1,8 @@
 import config
-import requests
-import unidecode
+
 from bs4 import BeautifulSoup
 
-
-def get_page(uri: str, *args, **kwargs):
-    headers = {
-        'User-Agent': config.USER_AGENT
-    }
-    custom_headers = kwargs.get('headers')
-    if custom_headers is not None:
-        headers = {**headers, **custom_headers}
-        del kwargs['headers']
-    return requests.get(uri, *args, headers=headers, **kwargs)
-
-
-def parse_search_query(name: str, separator='-'):
-    normalized = unidecode.unidecode(name).lower()
-    result = separator.join(normalized.split())
-    return result
+from utils import get_page, parse_search_query
 
 
 def search_anime(name: str):

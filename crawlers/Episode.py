@@ -12,6 +12,6 @@ class Episode:
     def video_options(self):
         if(self.__video_options is None):
             options = get_anime_episode_video(self.url)
-            self.__video_options = [EpisodeQuality(name=option.get(
+            self.__video_options = [EpisodeQuality(title=option.get(
                 'quality'), url=option.get('url')) for option in options]
         return self.__video_options
