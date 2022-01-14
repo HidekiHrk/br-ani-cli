@@ -27,13 +27,18 @@ def parse_search_query(name: str, separator='-'):
 def prompt_options(
         title: str, prompt_text: str,
         item_list: List[T],
-        not_exists_message: str = "Nada foi encontrado.") -> T:
+        not_exists_message: str = "Nada foi encontrado.",
+        default_option=0,
+        custom_options_processor=None) -> T:
     item_quantity = len(item_list)
     if(item_quantity == 0):
         print(not_exists_message)
         return None
+
+    options_processor = custom_options_processor if custom_options_processor is not None else (lambda item_list: map(
+        lambda item: f"[{item[0] + 1}]: {item[1].title}", enumerate(item_list)))
     print(title.format(length=item_quantity), *
-          map(lambda item: f"[{item[0] + 1}]: {item[1].title}", enumerate(item_list)), sep="\n  ")
+          options_processor(item_list), sep="\n  ")
     print()
     selected_item_index = None
     while selected_item_index is None or selected_item_index > item_quantity - 1 or selected_item_index < 0:
@@ -41,7 +46,7 @@ def prompt_options(
         if item_index.isdigit():
             selected_item_index = int(item_index) - 1
         elif item_index.strip() == '':
-            selected_item_index = 0
+            selected_item_index = default_option
     selected_item = item_list[selected_item_index]
     return selected_item
 
