@@ -14,13 +14,13 @@ Dependências:
 
 ```sh
 cd ~/Downloads
-wget https://github.com/HidekiHrk/br-ani-cli/releases/download/v0.2/br-ani-cli-linux.tar.gz
+wget https://github.com/HidekiHrk/br-ani-cli/releases/latest/download/br-ani-cli-linux.tar.gz
 ```
 
 Se você preferir utilizar **curl** ao invés de **wget**:
 
 ```sh
-curl -O https://github.com/HidekiHrk/br-ani-cli/releases/download/v0.2/br-ani-cli-linux.tar.gz
+curl -OL https://github.com/HidekiHrk/br-ani-cli/releases/latest/download/br-ani-cli-linux.tar.gz
 ```
 
 2. Extraia o pacote e finalize a instalação:
