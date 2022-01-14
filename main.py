@@ -2,16 +2,14 @@
 import mpv
 
 from crawlers.Anime import Anime
-from utils import prompt_options
+from utils import prompt_input, prompt_options
 
 
 def cli_interface():
     print('BR Anime CLI by HidekiHrk', '',
           '-------------------------', '', sep='\n')
-    anime_for_search = None
 
-    while anime_for_search is None or anime_for_search == '':
-        anime_for_search = input('Digite o anime que você procura: ')
+    anime_for_search = prompt_input('Digite o anime que você procura: ')
 
     print()
     anime_list = Anime.search(anime_for_search)
@@ -59,13 +57,25 @@ def cli_interface():
         player.terminate()
         print('Você fechou o vídeo.')
         print()
+
     return 1
 
 
 def main():
     prompt = 1
     while prompt == 1:
-        prompt = cli_interface()
+        try:
+            prompt = cli_interface()
+        except KeyboardInterrupt:
+            try:
+                print('\n')
+                response = input(
+                    'Você realmente deseja sair? [y/n] (padrão = y): ')
+                prompt = 0 if response.strip() == '' or response == 'y' else 1
+                if prompt == 1:
+                    print()
+            except KeyboardInterrupt:
+                prompt = 0
 
 
 if __name__ == "__main__":

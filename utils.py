@@ -44,3 +44,12 @@ def prompt_options(
             selected_item_index = 0
     selected_item = item_list[selected_item_index]
     return selected_item
+
+
+def prompt_input(prompt_text: str):
+    prompt_result = None
+
+    while prompt_result is None or prompt_result == '':
+        prompt_result = input(prompt_text)
+
+    return prompt_result
