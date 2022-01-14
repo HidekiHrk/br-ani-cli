@@ -1,7 +1,5 @@
 import config
-
 from bs4 import BeautifulSoup
-
 from utils import get_page, parse_search_query
 
 

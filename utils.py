@@ -1,8 +1,9 @@
+from typing import List, TypeVar
 
-import config
 import requests
 import unidecode
-from typing import TypeVar, List
+
+import config
 
 T = TypeVar('T')
 

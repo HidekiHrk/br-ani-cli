@@ -1,10 +1,39 @@
-
 from typing import List
+
 import mpv
 
 from crawlers.Anime import Anime
 from crawlers.Episode import Episode
 from utils import prompt_input, prompt_options
+
+
+def play_episode(episode: Episode):
+    quality_list = episode.video_options
+    selected_quality = prompt_options(
+        f'Qualidades de vídeo disponíveis para {episode.title}:',
+        'Selecione a qualidade desejada [padrão = {length}]: ',
+        quality_list,
+        not_exists_message='Parece que esse vídeo ainda não foi lançado :/',
+        default_option=len(quality_list) - 1
+    )
+    if(selected_quality is None):
+        return 0
+
+    print(
+        '', f'Assistindo episódio {episode.title} do anime {episode.title}',
+        f'Qualidade do vídeo: {selected_quality.title}', 'Aproveite!!', sep='\n')
+
+    player = mpv.MPV(input_default_bindings=True,
+                     input_vo_keyboard=True, osc=True)
+
+    player.play(selected_quality.url)
+    try:
+        player.wait_for_playback()
+    except mpv.ShutdownError:
+        print('Você fechou o vídeo.')
+        print()
+
+    player.terminate()
 
 
 def cli_interface():
@@ -35,32 +64,7 @@ def cli_interface():
         return 0
 
     print()
-    quality_list = selected_episode.video_options
-    selected_quality = prompt_options(
-        f'Qualidades de vídeo disponíveis para {selected_episode.title}:',
-        'Selecione a qualidade desejada [padrão = {length}]: ',
-        quality_list,
-        not_exists_message='Parece que esse vídeo ainda não foi lançado :/',
-        default_option=len(quality_list) - 1
-    )
-    if(selected_quality is None):
-        return 0
-
-    print(
-        '', f'Assistindo episódio {selected_episode.title} do anime {selected_anime.title}',
-        f'Qualidade do vídeo: {selected_quality.title}', 'Aproveite!!', sep='\n')
-
-    player = mpv.MPV(input_default_bindings=True,
-                     input_vo_keyboard=True, osc=True)
-
-    player.play(selected_quality.url)
-    try:
-        player.wait_for_playback()
-    except mpv.ShutdownError:
-        print('Você fechou o vídeo.')
-        print()
-
-    player.terminate()
+    play_episode(selected_episode)
 
     is_reviewing = True
     current_episode = selected_episode
@@ -82,7 +86,6 @@ def cli_interface():
             episode_enum[next_episode] = 'Próximo episódio'
 
         try:
-
             def option_processor(item_list: List[Episode]):
                 return map(lambda item: f"[{item[0] + 1}]: {episode_enum[item[1]]}", enumerate(item_list))
 
@@ -101,30 +104,7 @@ def cli_interface():
             current_episode = new_selected_episode
 
             print()
-            new_quality_list = new_selected_episode.video_options
-            new_selected_quality = prompt_options(
-                f'Qualidades de vídeo disponíveis para {new_selected_episode.title}:',
-                'Selecione a qualidade desejada [padrão = {length}]: ',
-                new_quality_list,
-                not_exists_message='Parece que esse vídeo ainda não foi lançado :/',
-                default_option=len(new_quality_list) - 1
-            )
-            if(new_selected_quality is None):
-                return 0
-
-            print(
-                '', f'Assistindo episódio {new_selected_episode.title} do anime {selected_anime.title}',
-                f'Qualidade do vídeo: {new_selected_quality.title}', 'Aproveite!!', sep='\n')
-
-            player = mpv.MPV(input_default_bindings=True,
-                             input_vo_keyboard=True, osc=True)
-            player.play(new_selected_quality.url)
-            try:
-                player.wait_for_playback()
-            except mpv.ShutdownError:
-                print('Você fechou o vídeo.')
-                print()
-            player.terminate()
+            play_episode(current_episode)
 
         except KeyboardInterrupt:
             is_reviewing = False
